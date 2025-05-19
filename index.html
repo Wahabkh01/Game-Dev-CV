@@ -571,85 +571,42 @@
               </div>
           </section>
           <!-- Hidden ATS-friendly resume -->
-      <div id="ats-resume">
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; padding: 1inch;">
-            <h1 style="color: #333;">Abdul Wahab</h1>
-            <p>Game Developer</p>
-            <p>Contact: wahab8761.aw@gmail.com | 0317 4102576 | Lahore, Pakistan</p>
-            
-            <h2>Professional Summary</h2>
-            <p>Experienced Game Developer with expertise in Unity, C#, and Godot. Proven track record in developing immersive gaming experiences, implementing AI systems, and optimizing performance across multiple platforms.</p>
-            
-            <h2>Technical Skills</h2>
-            <p>Unity Engine, C#, Godot Engine, GDScript, Python, Game Design, 3D Modeling, AI Implementation, Performance Optimization, UI/UX Design</p>
-            
-            <h2>Professional Experience</h2>
-            <h3>Game Developer - Askari Technologies | Present</h3>
-            <ul>
-                <li>Lead development of full-scale games using Unity and C#</li>
-                <li>Implement complex UI systems and API integrations</li>
-                <li>Manage backend systems and handle data processing</li>
-            </ul>
-
-            <h3>Junior Game Developer - InnovateX Labs | Mar 2024 - Jun 2024</h3>
-            <ul>
-                <li>Developed 3D simulation games using Unity</li>
-                <li>Created interactive environments and physics-based systems</li>
-                <li>Optimized performance for multiple platforms</li>
-            </ul>
-
-            <h3>Game Developer - PixelPerfect Games | Dec 2023 - Feb 2024</h3>
-            <ul>
-                <li>Developed Chess & Checkers games with AI implementation</li>
-                <li>Created polished GUI designs and smooth animations</li>
-                <li>Implemented advanced AI decision-making systems</li>
-            </ul>
-
-            <h2>Projects</h2>
-            <ul>
-                <li>Horror Hospital - Survival Horror Game (Unity, C#)</li>
-                <li>Eagle AR - Augmented Reality Experience (Unity, AR Foundation)</li>
-                <li>Time Platformers - 2D Platform Game with Time Mechanics (Unity, C#)</li>
-                <li>Chess AI - Strategic Board Game with AI (C#, Unity)</li>
-            </ul>
-        </div>
-    </div>
       </div>
   
       
   
       <script>
-          // Enhanced PDF generation function
-          function generatePDF() {
-              const element = document.getElementById('ats-resume');
-              const opt = {
-                  margin: [0.5, 0.5],
-                  filename: 'Abdul_Wahab_GameDev_Resume.pdf',
-                  image: { type: 'jpeg', quality: 0.98 },
-                  html2canvas: { scale: 2, useCORS: true },
-                  jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-                  pagebreak: { mode: ['avoid-all'] }
-              };
-  
-              const downloadBtn = document.querySelector('.download-btn');
-              const originalText = downloadBtn.innerHTML;
-              downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Quest Progress...';
-  
-              html2pdf().set(opt).from(element).save()
-                  .then(() => {
-                      downloadBtn.innerHTML = '<i class="fas fa-check"></i> Quest Completed!';
-                      showAchievement('Resume Master', 'Created ATS-optimized resume!');
-                      setTimeout(() => {
-                          downloadBtn.innerHTML = originalText;
-                      }, 2000);
-                  })
-                  .catch(() => {
-                      downloadBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Quest Failed';
-                      setTimeout(() => {
-                          downloadBtn.innerHTML = originalText;
-                      }, 2000);
-                  });
-          }
+          // Simplified download function
+function generatePDF() {
+    const downloadBtn = document.querySelector('.download-btn');
+    const originalText = downloadBtn.innerHTML;
+    downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Quest Progress...';
+    
+    // Create a link element
+    const downloadLink = document.createElement('a');
+    downloadLink.href = 'cv.pdf'; // Path to your existing PDF file
+    downloadLink.download = 'Abdul_Wahab_GameDev_Resume.pdf'; // Filename for download
+    
+    // Simulate download process
+    try {
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Show success message
+        downloadBtn.innerHTML = '<i class="fas fa-check"></i> Quest Completed!';
+        showAchievement('Resume Master', 'Downloaded ATS-optimized resume!');
+        setTimeout(() => {
+            downloadBtn.innerHTML = originalText;
+        }, 2000);
+    } catch (error) {
+        // Show error message if download fails
+        downloadBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Quest Failed';
+        setTimeout(() => {
+            downloadBtn.innerHTML = originalText;
+        }, 2000);
+    }
+}
   
           // Achievement notification function
           function showAchievement(title, description) {
