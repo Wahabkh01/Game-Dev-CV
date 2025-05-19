@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul Wahab - Game Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;500;700&display=swap');
+
+        :root {
+            --primary-color: #0e0f375b;
+            --secondary-color: #382fbe80;
+            --accent-color: #00aeff77;
+            --neon-glow: #00ffff;
+            --text-dark: #e1e1e160;
+            --text-light: #FFFFFF;
+            --pixel-border: 4px;
+            --health-bar-color: #00ff00;
+            --mana-bar-color: #0099ff70;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            line-height: 1.6;
+            background: #1a1a1a;
+            color: var(--text-light);
+            font-family: 'Roboto', sans-serif;
+            background-image: 
+                linear-gradient(45deg, rgba(44, 14, 55, 0.8) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(44, 14, 55, 0.8) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(44, 14, 55, 0.8) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(44, 14, 55, 0.8) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        .resume-wrapper {
+            max-width: 1400px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            padding: 1rem;
+            background: var(--primary-color);
+            border: var(--pixel-border) solid var(--accent-color);
+            box-shadow: 0 0 20px var(--neon-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resume-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--neon-glow), transparent);
+            animation: scanline 6s linear infinite;
+        }
+
+        .profile {
+            background: var(--secondary-color);
+            padding: 2rem;
+            border: var(--pixel-border) solid var(--accent-color);
+            position: relative;
+        }
+
+        .profile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 65%, rgba(255, 0, 255, 0.1) 75%, transparent 85%);
+            pointer-events: none;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            border: var(--pixel-border) solid var(--accent-color);
+            position: relative;
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: rotate(2deg) scale(1.05);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.8em;
+            color: var(--text-light);
+            margin: 1rem 0;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--neon-glow);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        .level-indicator {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            margin-top: 1rem;
+        }
+
+        .contact-info {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-color);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-item i {
+            color: var(--accent-color);
+        }
+
+        .skills-section {
+            margin: 2rem 0;
+        }
+
+        .skill-bar {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .skill-name {
+            margin-bottom: 0.5rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .skill-progress {
+            height: 12px;
+            background: #2a2a2a;
+            border: 2px solid var(--accent-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-level {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #ff69b4);
+            position: relative;
+            transition: width 1s ease-in-out;
+        }
+
+        .skill-level::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                transparent 100%);
+            animation: shine 2s infinite;
+        }
+
+        .stats-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-color);
+        }
+
+        .stat-bar {
+            height: 20px;
+            background: #2a2a2a;
+            margin: 0.5rem 0;
+            border: 2px solid var(--accent-color);
+            position: relative;
+        }
+
+        .health-bar, .mana-bar {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            transition: width 1s ease-in-out;
+        }
+
+        .health-bar {
+            background: var(--health-bar-color);
+            animation: pulse 2s infinite;
+        }
+
+        .mana-bar {
+            background: var(--mana-bar-color);
+            animation: shimmer 2s infinite;
+        }
+
+        .experience {
+            padding: 2rem;
+            background: var(--secondary-color);
+            border: var(--pixel-border) solid var(--accent-color);
+            position: relative;
+        }
+
+        .experience-item {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-color);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .experience-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .experience-header {
+            margin-bottom: 1rem;
+        }
+
+        .experience-header h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1em;
+            color: var(--accent-color);
+        }
+
+        .projects-section {
+            margin: 2rem 0;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .project-card {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-color);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) rotateY(10deg);
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .project-card h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9em;
+            margin-bottom: 1rem;
+        }
+
+        .project-card a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: var(--text-light);
+            text-decoration: none;
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .project-card a:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a, .download-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: var(--text-light);
+            border: 2px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover, .download-btn:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .download-btn {
+            width: auto;
+            padding: 0 1rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
+
+        .achievement {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ffd700;
+            color: #fff;
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        #ats-resume {
+            display: none;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1400px); }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-glow); }
+            50% { text-shadow: 0 0 20px var(--neon-glow), 0 0 30px var(--neon-glow); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @media (max-width: 968px) {
+            .resume-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .name-title {
+                font-size: 1.2em;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-wrapper" id="resume">
+        <!-- Profile Section -->
+        <section class="profile">
+            <div class="profile-header">
+                <div class="profile-image">
+                    <img src="/Wahab.png" alt="Abdul Wahab" />
+                </div>
+                <h1 class="name-title">Abdul Wahab</h1>
+                <p class="level-indicator">LVL 99 Game Dev</p>
+            </div>
+
+            <div class="stats-container">
+                <h3>Player Stats</h3>
+                <div class="stat-bar">
+                    <div class="health-bar" style="width: 85%"></div>
+                </div>
+                <div class="stat-bar">
+                    <div class="mana-bar" style="width: 75%"></div>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>0317 4102576</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>wahab8761.aw@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Lahore, Pakistan</span>
+                </div>
+            </div>
+
+            <div class="skills-section">
+                <h2>SKILL TREE</h2>
+                <div class="skill-bar">
+                    <div class="skill-name">
+                        <span>Unity</span>
+                        <span>90/100</span>
+                      </div>
+                      <div class="skill-progress">
+                          <div class="skill-level" style="width: 90%"></div>
+                      </div>
+                  </div>
+                  <div class="skill-bar">
+                      <div class="skill-name">
+                          <span>C#</span>
+                          <span>85/100</span>
+                      </div>
+                      <div class="skill-progress">
+                          <div class="skill-level" style="width: 85%"></div>
+                      </div>
+                  </div>
+                  <div class="skill-bar">
+                      <div class="skill-name">
+                          <span>Godot</span>
+                          <span>75/100</span>
+                      </div>
+                      <div class="skill-progress">
+                          <div class="skill-level" style="width: 75%"></div>
+                      </div>
+                  </div>
+                  <div class="skill-bar">
+                      <div class="skill-name">
+                          <span>GDScript</span>
+                          <span>70/100</span>
+                      </div>
+                      <div class="skill-progress">
+                          <div class="skill-level" style="width: 70%"></div>
+                      </div>
+                  </div>
+                  <div class="skill-bar">
+                      <div class="skill-name">
+                          <span>Python</span>
+                          <span>60/100</span>
+                      </div>
+                      <div class="skill-progress">
+                          <div class="skill-level" style="width: 60%"></div>
+                      </div>
+                  </div>
+              </div>
+  
+              <div class="social-links">
+                  <a href="https://www.facebook.com/share/2o5kvpEguRKuThrY/" target="_blank">
+                      <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="https://github.com/Wahabkh01" target="_blank">
+                      <i class="fab fa-github"></i>
+                  </a>
+                  <a href="https://www.linkedin.com/in/abdul-wahab-952b41238" target="_blank">
+                      <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <button class="download-btn" onclick="generatePDF()">
+                      <i class="fas fa-download"></i> Save Progress
+                  </button>
+              </div>
+          </section>
+  
+          <!-- Experience Section -->
+          <section class="experience">
+              <h2>QUEST LOG</h2>
+              
+              <div class="experience-item">
+                  <div class="experience-header">
+                      <h3>[ RECENT QUEST ] Game Developer</h3>
+                      <span>Askari Technologies | July 2024 - Nov 2024</span>
+                  </div>
+                  <p>Main quest: Full game development with UI customization and API integration. Side quest: Backend system management and data handling.</p>
+              </div>
+  
+              <div class="experience-item">
+                  <div class="experience-header">
+                      <h3>[ COMPLETED ] Game Developer</h3>
+                      <span>PixelPerfect Games | Dec 2023 - Feb 2024</span>
+                  </div>
+                  <p>Achievement Unlocked: Chess & Checkers Master
+                     • Implemented advanced AI systems
+                     • Crafted polished GUI designs
+                     • Mastered smooth animation techniques</p>
+              </div>
+  
+              <div class="projects-section">
+                  <h2>GAME INVENTORY</h2>
+                  <div class="project-grid">
+                      <div class="project-card">
+                          <h3>🏥 Horror Hospital</h3>
+                          <p>Survival Horror Experience</p>
+                          <a href="https://drive.google.com/drive/folders/1mXC4GbkQ1DD4mnH5ohLRwrlk1lLNB48b" target="_blank">
+                              [ PLAY DEMO ]
+                          </a>
+                      </div>
+                      <div class="project-card">
+                          <h3>🦅 Eagle AR</h3>
+                          <p>Augmented Reality Adventure</p>
+                          <a href="https://drive.google.com/drive/folders/1mXC4GbkQ1DD4mnH5ohLRwrlk1lLNB48b" target="_blank">
+                              [ VIEW QUEST ]
+                          </a>
+                      </div>
+                      <div class="project-card">
+                          <h3>⏰ Time Platformers</h3>
+                          <p>Time-Bending Platform Game</p>
+                          <a href="https://drive.google.com/drive/folders/1mXC4GbkQ1DD4mnH5ohLRwrlk1lLNB48b" target="_blank">
+                              [ START GAME ]
+                          </a>
+                      </div>
+                      <div class="project-card">
+                          <h3>♟️ Chess AI</h3>
+                          <p>Strategic AI Challenge</p>
+                          <a href="https://drive.google.com/drive/folders/1mXC4GbkQ1DD4mnH5ohLRwrlk1lLNB48b" target="_blank">
+                              [ BATTLE AI ]
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </section>
+          <!-- Hidden ATS-friendly resume -->
+      </div>
+  
+      
+  
+      <script>
+          // Simplified download function
+function generatePDF() {
+    const downloadBtn = document.querySelector('.download-btn');
+    const originalText = downloadBtn.innerHTML;
+    downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Quest Progress...';
+    
+    // Create a link element
+    const downloadLink = document.createElement('a');
+    downloadLink.href = 'cv.pdf'; // Path to your existing PDF file
+    downloadLink.download = 'Abdul_Wahab_GameDev_Resume.pdf'; // Filename for download
+    
+    // Simulate download process
+    try {
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Show success message
+        downloadBtn.innerHTML = '<i class="fas fa-check"></i> Quest Completed!';
+        showAchievement('Resume Master', 'Downloaded ATS-optimized resume!');
+        setTimeout(() => {
+            downloadBtn.innerHTML = originalText;
+        }, 2000);
+    } catch (error) {
+        // Show error message if download fails
+        downloadBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Quest Failed';
+        setTimeout(() => {
+            downloadBtn.innerHTML = originalText;
+        }, 2000);
+    }
+}
+  
+          // Achievement notification function
+          function showAchievement(title, description) {
+              const achievement = document.createElement('div');
+              achievement.className = 'achievement';
+              achievement.innerHTML = `
+                  <i class="fas fa-trophy"></i>
+                  <div>
+                      <h4>${title}</h4>
+                      <p>${description}</p>
+                  </div>
+              `;
+              document.body.appendChild(achievement);
+              setTimeout(() => achievement.remove(), 3000);
+          }
+  
+          // Initialize interactive elements
+          document.addEventListener('DOMContentLoaded', function() {
+              // Animate skill bars
+              const observer = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                      if (entry.isIntersecting) {
+                          entry.target.style.width = entry.target.getAttribute('data-width');
+                          showAchievement('Skill Unlocked', `Mastered ${entry.target.parentElement.previousElementSibling.firstElementChild.textContent}!`);
+                      }
+                  });
+              });
+  
+              document.querySelectorAll('.skill-level').forEach(skill => {
+                  skill.setAttribute('data-width', skill.style.width);
+                  skill.style.width = '0';
+                  observer.observe(skill);
+              });
+          });
+      </script>
+  </body>
+  </html>
